@@ -8,6 +8,7 @@ using System.Runtime.Serialization;
 using Azure.Core;
 using Orbits.GeneralProject.Core.Infrastructure;
 using Orbits.GeneralProject.DTO.BranchDto;
+using Orbits.GeneralProject.DTO.CourseTemplateDto;
 
 namespace Orbits.GeneralProject.BLL.Mapping
 {
@@ -16,6 +17,7 @@ namespace Orbits.GeneralProject.BLL.Mapping
         public EntityToDtoMappingProfile( )
         {
             CreateMap<Branch, BranchReDto>();
+            CreateMap<CourseTemplate, CourseTemplateDto>();
         }
     }
 }

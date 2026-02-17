@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Orbits.GeneralProject.Core.Entities;
 using Orbits.GeneralProject.DTO.BranchDto;
+using Orbits.GeneralProject.DTO.CourseTemplateDto;
 using Orbits.GeneralProject.DTO.Paging;
 
 namespace Orbits.GeneralProject.BLL.Mapping
@@ -11,6 +12,7 @@ namespace Orbits.GeneralProject.BLL.Mapping
         {
 
             CreateMap<BranchAddDto, Branch>();
+            CreateMap<CourseTemplateCreateUpdateDto, CourseTemplate>();
 
         }
     }
