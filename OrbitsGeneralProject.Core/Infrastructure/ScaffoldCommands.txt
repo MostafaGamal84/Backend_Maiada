@@ -1,6 +1,6 @@
 
 
-Scaffold-DbContext "Data source=.;initial catalog=DexefERP;Integrated security=True" Microsoft.EntityFrameworkCore.SqlServer -Context OrbitsContext -OutputDir Entities -Force
+Scaffold-DbContext "Data Source=localhost\SQLEXPRESS;Initial Catalog=LanguageCenterDB;Integrated Security=True;TrustServerCertificate=True" Microsoft.EntityFrameworkCore.SqlServer -Context OrbitsContext -OutputDir Entities -Force
 
 // scaffold from server:
 

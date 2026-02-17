@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
-
+using Orbits.GeneralProject.Core.Entities;
+using Orbits.GeneralProject.DTO.BranchDto;
 using Orbits.GeneralProject.DTO.Paging;
 
 namespace Orbits.GeneralProject.BLL.Mapping
@@ -9,7 +10,8 @@ namespace Orbits.GeneralProject.BLL.Mapping
         public DtoToEntityMappingProfile( )
         {
 
-           
+            CreateMap<BranchAddDto, Branch>();
+
         }
     }
 }

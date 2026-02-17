@@ -7,46 +7,26 @@ namespace Orbits.GeneralProject.Core.Entities
 {
     public partial class OrbitsContext : DbContext
     {
-        public virtual DbSet<Admin> Admins { get; set; } = null!;
-        public virtual DbSet<AppUserType> AppUserTypes { get; set; } = null!;
-        public virtual DbSet<AspNetRole> AspNetRoles { get; set; } = null!;
-        public virtual DbSet<AspNetRoleClaim> AspNetRoleClaims { get; set; } = null!;
-        public virtual DbSet<AspNetUser> AspNetUsers { get; set; } = null!;
-        public virtual DbSet<AspNetUserClaim> AspNetUserClaims { get; set; } = null!;
-        public virtual DbSet<AspNetUserLogin> AspNetUserLogins { get; set; } = null!;
-        public virtual DbSet<AspNetUserToken> AspNetUserTokens { get; set; } = null!;
-        public virtual DbSet<AttendStatue> AttendStatues { get; set; } = null!;
-        public virtual DbSet<Circle> Circles { get; set; } = null!;
-        public virtual DbSet<CircleManager> CircleManagers { get; set; } = null!;
-        public virtual DbSet<CircleStudent> CircleStudents { get; set; } = null!;
-        public virtual DbSet<CircleTime> CircleTimes { get; set; } = null!;
-        public virtual DbSet<Family> Families { get; set; } = null!;
-        public virtual DbSet<Governorate> Governorates { get; set; } = null!;
-        public virtual DbSet<HoursRecord> HoursRecords { get; set; } = null!;
-        public virtual DbSet<How> Hows { get; set; } = null!;
-        public virtual DbSet<IncomingAndOutgoing> IncomingAndOutgoings { get; set; } = null!;
-        public virtual DbSet<Manager> Managers { get; set; } = null!;
-        public virtual DbSet<ManagerStudent> ManagerStudents { get; set; } = null!;
-        public virtual DbSet<ManagerTeacher> ManagerTeachers { get; set; } = null!;
-        public virtual DbSet<ManagerTime> ManagerTimes { get; set; } = null!;
-        public virtual DbSet<Month> Months { get; set; } = null!;
-        public virtual DbSet<Nationality> Nationalities { get; set; } = null!;
-        public virtual DbSet<PayScreenShot> PayScreenShots { get; set; } = null!;
-        public virtual DbSet<PayStatue> PayStatues { get; set; } = null!;
-        public virtual DbSet<Permission> Permissions { get; set; } = null!;
-        public virtual DbSet<Quran> Qurans { get; set; } = null!;
+        public virtual DbSet<Attendance> Attendances { get; set; } = null!;
+        public virtual DbSet<Branch> Branches { get; set; } = null!;
+        public virtual DbSet<CourseInstance> CourseInstances { get; set; } = null!;
+        public virtual DbSet<CourseSetting> CourseSettings { get; set; } = null!;
+        public virtual DbSet<CourseTemplate> CourseTemplates { get; set; } = null!;
+        public virtual DbSet<Enrollment> Enrollments { get; set; } = null!;
+        public virtual DbSet<Payment> Payments { get; set; } = null!;
+        public virtual DbSet<QuestionChoice> QuestionChoices { get; set; } = null!;
+        public virtual DbSet<QuizQuestion> QuizQuestions { get; set; } = null!;
+        public virtual DbSet<Quizze> Quizzes { get; set; } = null!;
+        public virtual DbSet<Session> Sessions { get; set; } = null!;
+        public virtual DbSet<SessionHistory> SessionHistories { get; set; } = null!;
+        public virtual DbSet<SessionPurchas> SessionPurchases { get; set; } = null!;
+        public virtual DbSet<SmsLog> SmsLogs { get; set; } = null!;
         public virtual DbSet<Student> Students { get; set; } = null!;
-        public virtual DbSet<StudentReport> StudentReports { get; set; } = null!;
-        public virtual DbSet<StudentTime> StudentTimes { get; set; } = null!;
-        public virtual DbSet<Subscribe> Subscribes { get; set; } = null!;
-        public virtual DbSet<SubscribeType> SubscribeTypes { get; set; } = null!;
-        public virtual DbSet<Teacher> Teachers { get; set; } = null!;
-        public virtual DbSet<TeacherCircle> TeacherCircles { get; set; } = null!;
-        public virtual DbSet<TeacherHour> TeacherHours { get; set; } = null!;
-        public virtual DbSet<TeacherStudent> TeacherStudents { get; set; } = null!;
-        public virtual DbSet<TeacherTime> TeacherTimes { get; set; } = null!;
-        public virtual DbSet<Time> Times { get; set; } = null!;
-        public virtual DbSet<UserPermission> UserPermissions { get; set; } = null!;
+        public virtual DbSet<StudentAnswer> StudentAnswers { get; set; } = null!;
+        public virtual DbSet<StudentQuizAttempt> StudentQuizAttempts { get; set; } = null!;
+        public virtual DbSet<User> Users { get; set; } = null!;
+        public virtual DbSet<Wallet> Wallets { get; set; } = null!;
+        public virtual DbSet<WalletTransaction> WalletTransactions { get; set; } = null!;
 
  public OrbitsContext()
         {
@@ -57,492 +37,437 @@ namespace Orbits.GeneralProject.Core.Entities
             if (!optionsBuilder.IsConfigured)
             {
 #warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
-                optionsBuilder.UseSqlServer("Data source=N1NWPLSK12SQL-v02.shr.prod.ams1.secureserver.net;initial catalog=agialDB;Integrated security=False;User ID=ph20706648051;Password=Mostafa5020#;TrustServerCertificate=True;");
+                optionsBuilder.UseSqlServer("Data Source=localhost\\SQLEXPRESS;Initial Catalog=LanguageCenterDB;Integrated Security=True;TrustServerCertificate=True");
             }
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.HasDefaultSchema("ph20706648051");
-
-            modelBuilder.Entity<Admin>(entity =>
+            modelBuilder.Entity<Attendance>(entity =>
             {
-                entity.ToTable("Admin", "dbo");
+                entity.ToTable("Attendance");
 
-                entity.Property(e => e.Id).ValueGeneratedNever();
+                entity.HasIndex(e => e.SessionId, "IX_Attendance_Session");
 
-                entity.HasOne(d => d.IdNavigation)
-                    .WithOne(p => p.Admin)
-                    .HasForeignKey<Admin>(d => d.Id)
-                    .OnDelete(DeleteBehavior.ClientSetNull);
+                entity.Property(e => e.ExcuseReason).HasMaxLength(300);
+
+                entity.Property(e => e.MarkedAt)
+                    .HasColumnType("datetime")
+                    .HasDefaultValueSql("(getdate())");
+
+                entity.Property(e => e.Status).HasMaxLength(20);
+
+                entity.HasOne(d => d.Enrollment)
+                    .WithMany(p => p.Attendances)
+                    .HasForeignKey(d => d.EnrollmentId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_Att_Enroll");
+
+                entity.HasOne(d => d.Session)
+                    .WithMany(p => p.Attendances)
+                    .HasForeignKey(d => d.SessionId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_Att_Session");
             });
 
-            modelBuilder.Entity<AppUserType>(entity =>
+            modelBuilder.Entity<Branch>(entity =>
             {
-                entity.ToTable("AppUserTypes", "dbo");
+                entity.Property(e => e.Address).HasMaxLength(300);
 
-                entity.Property(e => e.NameAr).HasColumnName("Name_ar");
+                entity.Property(e => e.CreatedAt)
+                    .HasColumnType("datetime")
+                    .HasDefaultValueSql("(getdate())");
 
-                entity.Property(e => e.NameEn).HasColumnName("Name_en");
+                entity.Property(e => e.IsActive)
+                    .IsRequired()
+                    .HasDefaultValueSql("((1))");
+
+                entity.Property(e => e.Name).HasMaxLength(150);
+
+                entity.Property(e => e.Phone).HasMaxLength(50);
             });
 
-            modelBuilder.Entity<AspNetRole>(entity =>
+            modelBuilder.Entity<CourseInstance>(entity =>
             {
-                entity.ToTable("AspNetRoles", "dbo");
+                entity.Property(e => e.CreatedAt)
+                    .HasColumnType("datetime")
+                    .HasDefaultValueSql("(getdate())");
 
-                entity.Property(e => e.Name).HasMaxLength(256);
+                entity.Property(e => e.EndDate).HasColumnType("date");
 
-                entity.Property(e => e.NormalizedName).HasMaxLength(256);
-            });
+                entity.Property(e => e.Price).HasColumnType("decimal(18, 2)");
 
-            modelBuilder.Entity<AspNetRoleClaim>(entity =>
-            {
-                entity.ToTable("AspNetRoleClaims", "dbo");
+                entity.Property(e => e.StartDate).HasColumnType("date");
 
-                entity.HasOne(d => d.Role)
-                    .WithMany(p => p.AspNetRoleClaims)
-                    .HasForeignKey(d => d.RoleId);
-            });
+                entity.Property(e => e.Status)
+                    .HasMaxLength(50)
+                    .HasDefaultValueSql("('Open')");
 
-            modelBuilder.Entity<AspNetUser>(entity =>
-            {
-                entity.ToTable("AspNetUsers", "dbo");
+                entity.HasOne(d => d.Branch)
+                    .WithMany(p => p.CourseInstances)
+                    .HasForeignKey(d => d.BranchId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_CI_Branch");
 
-                entity.Property(e => e.Email).HasMaxLength(256);
-
-                entity.Property(e => e.NormalizedEmail).HasMaxLength(256);
-
-                entity.Property(e => e.NormalizedUserName).HasMaxLength(256);
-
-                entity.Property(e => e.UserName).HasMaxLength(256);
-
-                entity.HasOne(d => d.AppUserType)
-                    .WithMany(p => p.AspNetUsers)
-                    .HasForeignKey(d => d.AppUserTypeId);
-
-                entity.HasMany(d => d.Roles)
-                    .WithMany(p => p.Users)
-                    .UsingEntity<Dictionary<string, object>>(
-                        "AspNetUserRole",
-                        l => l.HasOne<AspNetRole>().WithMany().HasForeignKey("RoleId"),
-                        r => r.HasOne<AspNetUser>().WithMany().HasForeignKey("UserId"),
-                        j =>
-                        {
-                            j.HasKey("UserId", "RoleId");
-
-                            j.ToTable("AspNetUserRoles", "dbo");
-                        });
-            });
-
-            modelBuilder.Entity<AspNetUserClaim>(entity =>
-            {
-                entity.ToTable("AspNetUserClaims", "dbo");
-
-                entity.HasOne(d => d.User)
-                    .WithMany(p => p.AspNetUserClaims)
-                    .HasForeignKey(d => d.UserId);
-            });
-
-            modelBuilder.Entity<AspNetUserLogin>(entity =>
-            {
-                entity.HasKey(e => new { e.LoginProvider, e.ProviderKey });
-
-                entity.ToTable("AspNetUserLogins", "dbo");
-
-                entity.HasOne(d => d.User)
-                    .WithMany(p => p.AspNetUserLogins)
-                    .HasForeignKey(d => d.UserId);
-            });
-
-            modelBuilder.Entity<AspNetUserToken>(entity =>
-            {
-                entity.HasKey(e => new { e.UserId, e.LoginProvider, e.Name });
-
-                entity.ToTable("AspNetUserTokens", "dbo");
-
-                entity.HasOne(d => d.User)
-                    .WithMany(p => p.AspNetUserTokens)
-                    .HasForeignKey(d => d.UserId);
-            });
-
-            modelBuilder.Entity<AttendStatue>(entity =>
-            {
-                entity.ToTable("AttendStatues", "dbo");
-            });
-
-            modelBuilder.Entity<Circle>(entity =>
-            {
-                entity.ToTable("Circles", "dbo");
-            });
-
-            modelBuilder.Entity<CircleManager>(entity =>
-            {
-                entity.ToTable("CircleManagers", "dbo");
-
-                entity.HasOne(d => d.Circle)
-                    .WithMany(p => p.CircleManagers)
-                    .HasForeignKey(d => d.CircleId)
-                    .OnDelete(DeleteBehavior.Cascade);
-
-                entity.HasOne(d => d.Manager)
-                    .WithMany(p => p.CircleManagers)
-                    .HasForeignKey(d => d.ManagerId)
-                    .OnDelete(DeleteBehavior.Cascade);
-            });
-
-            modelBuilder.Entity<CircleStudent>(entity =>
-            {
-                entity.ToTable("CircleStudents", "dbo");
-
-                entity.HasOne(d => d.Circle)
-                    .WithMany(p => p.CircleStudents)
-                    .HasForeignKey(d => d.CircleId);
-
-                entity.HasOne(d => d.Student)
-                    .WithMany(p => p.CircleStudents)
-                    .HasForeignKey(d => d.StudentId);
-            });
-
-            modelBuilder.Entity<CircleTime>(entity =>
-            {
-                entity.ToTable("CircleTime", "dbo");
-
-                entity.HasOne(d => d.Circle)
-                    .WithMany(p => p.CircleTimes)
-                    .HasForeignKey(d => d.CircleId);
-
-                entity.HasOne(d => d.Time)
-                    .WithMany(p => p.CircleTimes)
-                    .HasForeignKey(d => d.TimeId);
-            });
-
-            modelBuilder.Entity<Family>(entity =>
-            {
-                entity.ToTable("Families", "dbo");
-            });
-
-            modelBuilder.Entity<Governorate>(entity =>
-            {
-                entity.ToTable("Governorates", "dbo");
-
-                entity.Property(e => e.NameAr).HasColumnName("Name_ar");
-
-                entity.Property(e => e.NameEn).HasColumnName("Name_en");
-            });
-
-            modelBuilder.Entity<HoursRecord>(entity =>
-            {
-                entity.ToTable("HoursRecords", "dbo");
-
-                entity.Property(e => e.PriceLe).HasColumnName("PriceLE");
-
-                entity.HasOne(d => d.SubscribeType)
-                    .WithMany(p => p.HoursRecords)
-                    .HasForeignKey(d => d.SubscribeTypeId);
+                entity.HasOne(d => d.CourseTemplate)
+                    .WithMany(p => p.CourseInstances)
+                    .HasForeignKey(d => d.CourseTemplateId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_CI_Template");
 
                 entity.HasOne(d => d.Teacher)
-                    .WithMany(p => p.HoursRecords)
-                    .HasForeignKey(d => d.TeacherId);
+                    .WithMany(p => p.CourseInstances)
+                    .HasForeignKey(d => d.TeacherId)
+                    .HasConstraintName("FK_CI_Teacher");
             });
 
-            modelBuilder.Entity<How>(entity =>
+            modelBuilder.Entity<CourseSetting>(entity =>
             {
-                entity.ToTable("hows", "dbo");
-
-                entity.HasIndex(e => new { e.NameAr, e.NameEn }, "uniqeRows")
+                entity.HasIndex(e => e.CourseInstanceId, "UQ__CourseSe__31B5AC09BDBBD691")
                     .IsUnique();
 
-                entity.Property(e => e.NameAr).HasColumnName("Name_ar");
+                entity.Property(e => e.AbsenceLimit).HasDefaultValueSql("((3))");
 
-                entity.Property(e => e.NameEn).HasColumnName("Name_en");
+                entity.Property(e => e.AbsenceType)
+                    .HasMaxLength(20)
+                    .HasDefaultValueSql("('Total')");
+
+                entity.Property(e => e.AllowReplaceWithQuiz).HasDefaultValueSql("((1))");
+
+                entity.Property(e => e.AllowReschedule).HasDefaultValueSql("((1))");
+
+                entity.Property(e => e.AutoDismissEnabled).HasDefaultValueSql("((1))");
+
+                entity.Property(e => e.RefundPolicy)
+                    .HasMaxLength(50)
+                    .HasDefaultValueSql("('FullCourseOnly')");
+
+                entity.Property(e => e.ReminderBeforeHours).HasDefaultValueSql("((24))");
+
+                entity.HasOne(d => d.CourseInstance)
+                    .WithOne(p => p.CourseSetting)
+                    .HasForeignKey<CourseSetting>(d => d.CourseInstanceId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_CS_Course");
             });
 
-            modelBuilder.Entity<IncomingAndOutgoing>(entity =>
+            modelBuilder.Entity<CourseTemplate>(entity =>
             {
-                entity.ToTable("IncomingAndOutgoings", "dbo");
+                entity.Property(e => e.CreatedAt)
+                    .HasColumnType("datetime")
+                    .HasDefaultValueSql("(getdate())");
+
+                entity.Property(e => e.DefaultPrice).HasColumnType("decimal(18, 2)");
+
+                entity.Property(e => e.Level).HasMaxLength(100);
+
+                entity.Property(e => e.Name).HasMaxLength(200);
             });
 
-            modelBuilder.Entity<Manager>(entity =>
+            modelBuilder.Entity<Enrollment>(entity =>
             {
-                entity.ToTable("Manager", "dbo");
+                entity.HasIndex(e => e.StudentId, "IX_Enrollments_Student");
 
-                entity.Property(e => e.Id).ValueGeneratedNever();
+                entity.Property(e => e.AbsenceCount).HasDefaultValueSql("((0))");
 
-                entity.HasOne(d => d.Governorate)
-                    .WithMany(p => p.Managers)
-                    .HasForeignKey(d => d.GovernorateId);
+                entity.Property(e => e.AttendanceCount).HasDefaultValueSql("((0))");
 
-                entity.HasOne(d => d.IdNavigation)
-                    .WithOne(p => p.Manager)
-                    .HasForeignKey<Manager>(d => d.Id)
-                    .OnDelete(DeleteBehavior.ClientSetNull);
-            });
+                entity.Property(e => e.ConsecutiveAbsenceCount).HasDefaultValueSql("((0))");
 
-            modelBuilder.Entity<ManagerStudent>(entity =>
-            {
-                entity.ToTable("ManagerStudents", "dbo");
+                entity.Property(e => e.CreatedAt)
+                    .HasColumnType("datetime")
+                    .HasDefaultValueSql("(getdate())");
 
-                entity.HasOne(d => d.Manager)
-                    .WithMany(p => p.ManagerStudents)
-                    .HasForeignKey(d => d.ManagerId)
-                    .OnDelete(DeleteBehavior.Cascade);
+                entity.Property(e => e.PurchaseType)
+                    .HasMaxLength(20)
+                    .HasDefaultValueSql("('FullCourse')");
+
+                entity.Property(e => e.Status)
+                    .HasMaxLength(50)
+                    .HasDefaultValueSql("('Active')");
+
+                entity.HasOne(d => d.CourseInstance)
+                    .WithMany(p => p.Enrollments)
+                    .HasForeignKey(d => d.CourseInstanceId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_Enroll_Course");
 
                 entity.HasOne(d => d.Student)
-                    .WithMany(p => p.ManagerStudents)
+                    .WithMany(p => p.Enrollments)
                     .HasForeignKey(d => d.StudentId)
-                    .OnDelete(DeleteBehavior.Cascade);
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_Enroll_Student");
             });
 
-            modelBuilder.Entity<ManagerTeacher>(entity =>
+            modelBuilder.Entity<Payment>(entity =>
             {
-                entity.ToTable("ManagerTeachers", "dbo");
+                entity.Property(e => e.Amount).HasColumnType("decimal(18, 2)");
 
-                entity.HasOne(d => d.Manager)
-                    .WithMany(p => p.ManagerTeachers)
-                    .HasForeignKey(d => d.ManagerId);
+                entity.Property(e => e.Method).HasMaxLength(50);
 
-                entity.HasOne(d => d.Teacher)
-                    .WithMany(p => p.ManagerTeachers)
-                    .HasForeignKey(d => d.TeacherId);
+                entity.Property(e => e.PaymentDate)
+                    .HasColumnType("datetime")
+                    .HasDefaultValueSql("(getdate())");
+
+                entity.HasOne(d => d.Enrollment)
+                    .WithMany(p => p.Payments)
+                    .HasForeignKey(d => d.EnrollmentId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_Payment_Enroll");
             });
 
-            modelBuilder.Entity<ManagerTime>(entity =>
+            modelBuilder.Entity<QuestionChoice>(entity =>
             {
-                entity.ToTable("ManagerTimes", "dbo");
+                entity.Property(e => e.ChoiceText).HasMaxLength(500);
 
-                entity.HasOne(d => d.Manager)
-                    .WithMany(p => p.ManagerTimes)
-                    .HasForeignKey(d => d.ManagerId);
+                entity.Property(e => e.IsCorrect).HasDefaultValueSql("((0))");
 
-                entity.HasOne(d => d.Time)
-                    .WithMany(p => p.ManagerTimes)
-                    .HasForeignKey(d => d.TimeId);
+                entity.HasOne(d => d.Question)
+                    .WithMany(p => p.QuestionChoices)
+                    .HasForeignKey(d => d.QuestionId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_QC_Question");
             });
 
-            modelBuilder.Entity<Month>(entity =>
+            modelBuilder.Entity<QuizQuestion>(entity =>
             {
-                entity.ToTable("Months", "dbo");
+                entity.HasOne(d => d.Quiz)
+                    .WithMany(p => p.QuizQuestions)
+                    .HasForeignKey(d => d.QuizId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_QQ_Quiz");
             });
 
-            modelBuilder.Entity<Nationality>(entity =>
+            modelBuilder.Entity<Quizze>(entity =>
             {
-                entity.ToTable("Nationalities", "dbo");
+                entity.Property(e => e.IsActive).HasDefaultValueSql("((1))");
+
+                entity.Property(e => e.Title).HasMaxLength(200);
             });
 
-            modelBuilder.Entity<PayScreenShot>(entity =>
+            modelBuilder.Entity<Session>(entity =>
             {
-                entity.ToTable("PayScreenShots", "dbo");
+                entity.HasIndex(e => e.CourseInstanceId, "IX_Sessions_Course");
+
+                entity.Property(e => e.OriginalSessionDate).HasColumnType("date");
+
+                entity.Property(e => e.SessionDate).HasColumnType("date");
+
+                entity.Property(e => e.Status)
+                    .HasMaxLength(50)
+                    .HasDefaultValueSql("('Scheduled')");
+
+                entity.Property(e => e.Title).HasMaxLength(200);
+
+                entity.Property(e => e.Type)
+                    .HasMaxLength(20)
+                    .HasDefaultValueSql("('Class')");
+
+                entity.HasOne(d => d.CourseInstance)
+                    .WithMany(p => p.Sessions)
+                    .HasForeignKey(d => d.CourseInstanceId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_Session_Course");
+            });
+
+            modelBuilder.Entity<SessionHistory>(entity =>
+            {
+                entity.ToTable("SessionHistory");
+
+                entity.Property(e => e.ChangedAt)
+                    .HasColumnType("datetime")
+                    .HasDefaultValueSql("(getdate())");
+
+                entity.Property(e => e.NewDate).HasColumnType("date");
+
+                entity.Property(e => e.OldDate).HasColumnType("date");
+
+                entity.Property(e => e.Reason).HasMaxLength(300);
+
+                entity.HasOne(d => d.ChangedByNavigation)
+                    .WithMany(p => p.SessionHistories)
+                    .HasForeignKey(d => d.ChangedBy)
+                    .HasConstraintName("FK_SH_User");
+
+                entity.HasOne(d => d.Session)
+                    .WithMany(p => p.SessionHistories)
+                    .HasForeignKey(d => d.SessionId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_SH_Session");
+            });
+
+            modelBuilder.Entity<SessionPurchas>(entity =>
+            {
+                entity.Property(e => e.Price).HasColumnType("decimal(18, 2)");
+
+                entity.Property(e => e.Status)
+                    .HasMaxLength(50)
+                    .HasDefaultValueSql("('Active')");
+
+                entity.HasOne(d => d.Session)
+                    .WithMany(p => p.SessionPurchas)
+                    .HasForeignKey(d => d.SessionId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_SP_Session");
 
                 entity.HasOne(d => d.Student)
-                    .WithMany(p => p.PayScreenShots)
-                    .HasForeignKey(d => d.StudentId);
+                    .WithMany(p => p.SessionPurchas)
+                    .HasForeignKey(d => d.StudentId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_SP_Student");
             });
 
-            modelBuilder.Entity<PayStatue>(entity =>
+            modelBuilder.Entity<SmsLog>(entity =>
             {
-                entity.ToTable("PayStatues", "dbo");
-            });
+                entity.Property(e => e.Message).HasMaxLength(500);
 
-            modelBuilder.Entity<Permission>(entity =>
-            {
-                entity.ToTable("permissions", "dbo");
-            });
+                entity.Property(e => e.SentAt)
+                    .HasColumnType("datetime")
+                    .HasDefaultValueSql("(getdate())");
 
-            modelBuilder.Entity<Quran>(entity =>
-            {
-                entity.ToTable("Qurans", "dbo");
+                entity.Property(e => e.Status).HasMaxLength(50);
+
+                entity.HasOne(d => d.Student)
+                    .WithMany(p => p.SmsLogs)
+                    .HasForeignKey(d => d.StudentId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_SMS_Student");
             });
 
             modelBuilder.Entity<Student>(entity =>
             {
-                entity.ToTable("Student", "dbo");
+                entity.HasIndex(e => e.UniqueCode, "IX_Students_UniqueCode");
 
-                entity.Property(e => e.Id).ValueGeneratedNever();
+                entity.HasIndex(e => e.UniqueCode, "UQ__Students__BB96DE6F251726B7")
+                    .IsUnique();
 
-                entity.HasOne(d => d.Family)
+                entity.Property(e => e.CreatedAt)
+                    .HasColumnType("datetime")
+                    .HasDefaultValueSql("(getdate())");
+
+                entity.Property(e => e.FullName).HasMaxLength(150);
+
+                entity.Property(e => e.IsActive).HasDefaultValueSql("((1))");
+
+                entity.Property(e => e.Mobile).HasMaxLength(50);
+
+                entity.Property(e => e.NationalId).HasMaxLength(50);
+
+                entity.Property(e => e.ParentMobile).HasMaxLength(50);
+
+                entity.Property(e => e.UniqueCode).HasMaxLength(50);
+
+                entity.HasOne(d => d.Branch)
                     .WithMany(p => p.Students)
-                    .HasForeignKey(d => d.FamilyId);
-
-                entity.HasOne(d => d.Governorate)
-                    .WithMany(p => p.Students)
-                    .HasForeignKey(d => d.GovernorateId);
-
-                entity.HasOne(d => d.IdNavigation)
-                    .WithOne(p => p.Student)
-                    .HasForeignKey<Student>(d => d.Id)
-                    .OnDelete(DeleteBehavior.ClientSetNull);
-
-                entity.HasOne(d => d.Nationality)
-                    .WithMany(p => p.Students)
-                    .HasForeignKey(d => d.NationalityId);
-
-                entity.HasOne(d => d.PayStatue)
-                    .WithMany(p => p.Students)
-                    .HasForeignKey(d => d.PayStatueId);
-
-                entity.HasOne(d => d.Subscribe)
-                    .WithMany(p => p.Students)
-                    .HasForeignKey(d => d.SubscribeId);
+                    .HasForeignKey(d => d.BranchId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_Student_Branch");
             });
 
-            modelBuilder.Entity<StudentReport>(entity =>
+            modelBuilder.Entity<StudentAnswer>(entity =>
             {
-                entity.ToTable("StudentReports", "dbo");
+                entity.HasOne(d => d.Attempt)
+                    .WithMany(p => p.StudentAnswers)
+                    .HasForeignKey(d => d.AttemptId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_SA_Attempt");
 
-                entity.HasOne(d => d.AttendStatue)
-                    .WithMany(p => p.StudentReports)
-                    .HasForeignKey(d => d.AttendStatueId);
+                entity.HasOne(d => d.Question)
+                    .WithMany(p => p.StudentAnswers)
+                    .HasForeignKey(d => d.QuestionId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_SA_Question");
 
-                entity.HasOne(d => d.Circle)
-                    .WithMany(p => p.StudentReports)
-                    .HasForeignKey(d => d.CircleId);
+                entity.HasOne(d => d.SelectedChoice)
+                    .WithMany(p => p.StudentAnswers)
+                    .HasForeignKey(d => d.SelectedChoiceId)
+                    .HasConstraintName("FK_SA_Choice");
+            });
 
-                entity.HasOne(d => d.DistantPast)
-                    .WithMany(p => p.StudentReportDistantPasts)
-                    .HasForeignKey(d => d.DistantPastId);
+            modelBuilder.Entity<StudentQuizAttempt>(entity =>
+            {
+                entity.Property(e => e.EndTime).HasColumnType("datetime");
 
-                entity.HasOne(d => d.FarthestPast)
-                    .WithMany(p => p.StudentReportFarthestPasts)
-                    .HasForeignKey(d => d.FarthestPastId);
+                entity.Property(e => e.StartTime)
+                    .HasColumnType("datetime")
+                    .HasDefaultValueSql("(getdate())");
 
-                entity.HasOne(d => d.New)
-                    .WithMany(p => p.StudentReportNews)
-                    .HasForeignKey(d => d.NewId);
-
-                entity.HasOne(d => d.RecentPast)
-                    .WithMany(p => p.StudentReportRecentPasts)
-                    .HasForeignKey(d => d.RecentPastId);
+                entity.HasOne(d => d.Quiz)
+                    .WithMany(p => p.StudentQuizAttempts)
+                    .HasForeignKey(d => d.QuizId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_SQA_Quiz");
 
                 entity.HasOne(d => d.Student)
-                    .WithMany(p => p.StudentReports)
-                    .HasForeignKey(d => d.StudentId);
-
-                entity.HasOne(d => d.Teacher)
-                    .WithMany(p => p.StudentReports)
-                    .HasForeignKey(d => d.TeacherId);
+                    .WithMany(p => p.StudentQuizAttempts)
+                    .HasForeignKey(d => d.StudentId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_SQA_Student");
             });
 
-            modelBuilder.Entity<StudentTime>(entity =>
+            modelBuilder.Entity<User>(entity =>
             {
-                entity.ToTable("StudentTimes", "dbo");
+                entity.Property(e => e.CreatedAt)
+                    .HasColumnType("datetime")
+                    .HasDefaultValueSql("(getdate())");
 
-                entity.HasOne(d => d.Student)
-                    .WithMany(p => p.StudentTimes)
-                    .HasForeignKey(d => d.StudentId);
+                entity.Property(e => e.Email).HasMaxLength(150);
 
-                entity.HasOne(d => d.Time)
-                    .WithMany(p => p.StudentTimes)
-                    .HasForeignKey(d => d.TimeId);
-            });
+                entity.Property(e => e.FullName).HasMaxLength(150);
 
-            modelBuilder.Entity<Subscribe>(entity =>
-            {
-                entity.ToTable("Subscribes", "dbo");
-
-                entity.Property(e => e.PriceLe).HasColumnName("PriceLE");
-
-                entity.HasOne(d => d.SubscribeType)
-                    .WithMany(p => p.Subscribes)
-                    .HasForeignKey(d => d.SubscribeTypeId);
-            });
-
-            modelBuilder.Entity<SubscribeType>(entity =>
-            {
-                entity.ToTable("SubscribeTypes", "dbo");
-            });
-
-            modelBuilder.Entity<Teacher>(entity =>
-            {
-                entity.ToTable("Teacher", "dbo");
-
-                entity.Property(e => e.Id).ValueGeneratedNever();
-
-                entity.Property(e => e.ForignTeacher)
+                entity.Property(e => e.IsActive)
                     .IsRequired()
-                    .HasDefaultValueSql("(CONVERT([bit],(0)))");
+                    .HasDefaultValueSql("((1))");
 
-                entity.HasOne(d => d.Governorate)
-                    .WithMany(p => p.Teachers)
-                    .HasForeignKey(d => d.GovernorateId);
+                entity.Property(e => e.Mobile).HasMaxLength(50);
 
-                entity.HasOne(d => d.IdNavigation)
-                    .WithOne(p => p.Teacher)
-                    .HasForeignKey<Teacher>(d => d.Id)
-                    .OnDelete(DeleteBehavior.ClientSetNull);
+                entity.Property(e => e.PasswordHash).HasMaxLength(500);
+
+                entity.Property(e => e.Role).HasMaxLength(50);
+
+                entity.HasOne(d => d.Branch)
+                    .WithMany(p => p.Users)
+                    .HasForeignKey(d => d.BranchId)
+                    .HasConstraintName("FK_Users_Branch");
             });
 
-            modelBuilder.Entity<TeacherCircle>(entity =>
+            modelBuilder.Entity<Wallet>(entity =>
             {
-                entity.ToTable("TeacherCircles", "dbo");
+                entity.HasIndex(e => e.StudentId, "UQ__Wallets__32C52B98047FF1CE")
+                    .IsUnique();
 
-                entity.HasOne(d => d.Circle)
-                    .WithMany(p => p.TeacherCircles)
-                    .HasForeignKey(d => d.CircleId);
+                entity.Property(e => e.Balance).HasColumnType("decimal(18, 2)");
 
-                entity.HasOne(d => d.Teacher)
-                    .WithMany(p => p.TeacherCircles)
-                    .HasForeignKey(d => d.TeacherId);
-            });
-
-            modelBuilder.Entity<TeacherHour>(entity =>
-            {
-                entity.ToTable("TeacherHours", "dbo");
-
-                entity.HasOne(d => d.AttendStatue)
-                    .WithMany(p => p.TeacherHours)
-                    .HasForeignKey(d => d.AttendStatueId);
-
-                entity.HasOne(d => d.SubscribeType)
-                    .WithMany(p => p.TeacherHours)
-                    .HasForeignKey(d => d.SubscribeTypeId);
-
-                entity.HasOne(d => d.Teacher)
-                    .WithMany(p => p.TeacherHours)
-                    .HasForeignKey(d => d.TeacherId);
-            });
-
-            modelBuilder.Entity<TeacherStudent>(entity =>
-            {
-                entity.ToTable("TeacherStudents", "dbo");
+                entity.Property(e => e.CreatedAt)
+                    .HasColumnType("datetime")
+                    .HasDefaultValueSql("(getdate())");
 
                 entity.HasOne(d => d.Student)
-                    .WithMany(p => p.TeacherStudents)
-                    .HasForeignKey(d => d.StudentId);
-
-                entity.HasOne(d => d.Teacher)
-                    .WithMany(p => p.TeacherStudents)
-                    .HasForeignKey(d => d.TeacherId);
+                    .WithOne(p => p.Wallet)
+                    .HasForeignKey<Wallet>(d => d.StudentId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_Wallet_Student");
             });
 
-            modelBuilder.Entity<TeacherTime>(entity =>
+            modelBuilder.Entity<WalletTransaction>(entity =>
             {
-                entity.ToTable("TeacherTimes", "dbo");
+                entity.HasIndex(e => e.WalletId, "IX_WalletTransactions_Wallet");
 
-                entity.HasOne(d => d.Teacher)
-                    .WithMany(p => p.TeacherTimes)
-                    .HasForeignKey(d => d.TeacherId);
+                entity.Property(e => e.Amount).HasColumnType("decimal(18, 2)");
 
-                entity.HasOne(d => d.Time)
-                    .WithMany(p => p.TeacherTimes)
-                    .HasForeignKey(d => d.TimeId);
-            });
+                entity.Property(e => e.CreatedAt)
+                    .HasColumnType("datetime")
+                    .HasDefaultValueSql("(getdate())");
 
-            modelBuilder.Entity<Time>(entity =>
-            {
-                entity.ToTable("Times", "dbo");
-            });
+                entity.Property(e => e.Notes).HasMaxLength(300);
 
-            modelBuilder.Entity<UserPermission>(entity =>
-            {
-                entity.ToTable("userPermissions", "dbo");
+                entity.Property(e => e.TransactionType).HasMaxLength(50);
 
-                entity.HasOne(d => d.Permission)
-                    .WithMany(p => p.UserPermissions)
-                    .HasForeignKey(d => d.PermissionId);
-
-                entity.HasOne(d => d.User)
-                    .WithMany(p => p.UserPermissions)
-                    .HasForeignKey(d => d.UserId);
+                entity.HasOne(d => d.Wallet)
+                    .WithMany(p => p.WalletTransactions)
+                    .HasForeignKey(d => d.WalletId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_WT_Wallet");
             });
 
             OnModelCreatingPartial(modelBuilder);

@@ -7,7 +7,7 @@ using Orbits.GeneralProject.DTO.Translation;
 using System.Runtime.Serialization;
 using Azure.Core;
 using Orbits.GeneralProject.Core.Infrastructure;
-using Orbits.GeneralProject.DTO.StudentDto;
+using Orbits.GeneralProject.DTO.BranchDto;
 
 namespace Orbits.GeneralProject.BLL.Mapping
 {
@@ -15,7 +15,7 @@ namespace Orbits.GeneralProject.BLL.Mapping
     {
         public EntityToDtoMappingProfile( )
         {
-            CreateMap<Student, StudentLookupDto>();
+            CreateMap<Branch, BranchReDto>();
         }
     }
 }
