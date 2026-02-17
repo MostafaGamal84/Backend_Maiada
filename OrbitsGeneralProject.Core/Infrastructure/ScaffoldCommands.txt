@@ -1,0 +1,9 @@
+
+
+Scaffold-DbContext "Data source=.;initial catalog=DexefERP;Integrated security=True" Microsoft.EntityFrameworkCore.SqlServer -Context OrbitsContext -OutputDir Entities -Force
+
+// scaffold from server:
+
+Scaffold-DbContext "Data source=N1NWPLSK12SQL-v02.shr.prod.ams1.secureserver.net;initial catalog=agialDB;Integrated security=False;User ID=ph20706648051;Password=Mostafa5020#;TrustServerCertificate=True;" Microsoft.EntityFrameworkCore.SqlServer -Context OrbitsContext -OutputDir Entities -Force
+
+
