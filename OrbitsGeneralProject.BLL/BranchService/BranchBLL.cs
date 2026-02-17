@@ -2,7 +2,6 @@ using AutoMapper;
 using Orbits.GeneralProject.BLL.BaseReponse;
 using Orbits.GeneralProject.Core.Entities;
 using Orbits.GeneralProject.DTO;
-using Orbits.GeneralProject.Core.Infrastructure;
 using Orbits.GeneralProject.DTO.BranchDto;
 using Orbits.GeneralProject.Repositroy.Base;
 using System;
@@ -17,66 +16,10 @@ namespace Orbits.GeneralProject.BLL.BranchService
     {
         private readonly IRepository<Branch> _branchRepository;
         private readonly IMapper _mapper;
-        private readonly IUnitOfWork _unitOfWork;
-
-        public BranchBLL(IRepository<Branch> branchRepository, IMapper mapper, IUnitOfWork unitOfWork)
+        public BranchBLL(IRepository<Branch> branchRepository, IMapper mapper)
         {
             _branchRepository = branchRepository;
             _mapper = mapper;
-            _unitOfWork = unitOfWork;
-        }
-
-
-        public async Task<IResponse<BranchReDto>> Update(BranchAddDto branchDto)
-        {
-            var output = new Response<BranchReDto>();
-            try
-            {
-                var existingBranch = await _branchRepository.GetByIdAsync(branchDto.Id);
-
-                if (existingBranch == null || existingBranch.IsDeleted)
-                {
-                    return output.CreateResponse(Orbits.GeneralProject.BLL.Constants.MessageCodes.NotFound, "Branch not found");
-                }
-
-                existingBranch.Name = branchDto.Name;
-                existingBranch.Address = branchDto.Address;
-                existingBranch.Phone = branchDto.Phone;
-
-                _branchRepository.Update(existingBranch);
-                await _unitOfWork.SaveChanges();
-
-                var mappedResult = _mapper.Map<BranchReDto>(existingBranch);
-                return output.CreateResponse(mappedResult);
-            }
-            catch (Exception ex)
-            {
-                return output.CreateResponse(ex);
-            }
-        }
-
-        public async Task<IResponse<bool>> SoftDelete(int id)
-        {
-            var output = new Response<bool>();
-            try
-            {
-                var existingBranch = await _branchRepository.GetByIdAsync(id);
-
-                if (existingBranch == null || existingBranch.IsDeleted)
-                {
-                    return output.CreateResponse(Orbits.GeneralProject.BLL.Constants.MessageCodes.NotFound, "Branch not found");
-                }
-
-                existingBranch.IsDeleted = true;
-                _branchRepository.Update(existingBranch);
-                await _unitOfWork.SaveChanges();
-
-                return output.CreateResponse(true);
-            }
-            catch (Exception ex)
-            {
-                return output.CreateResponse(ex);
-            }
         }
 
         public async Task<IResponse<List<BranchReDto>>> Get()
