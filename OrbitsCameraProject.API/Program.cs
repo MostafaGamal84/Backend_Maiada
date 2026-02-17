@@ -1,5 +1,6 @@
 
 #region Configuration
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Orbits.GeneralProject.BLL;
 using Orbits.GeneralProject.BLL.StaticEnums;
 using Orbits.GeneralProject.DTO.Setting.Files;
@@ -25,6 +26,18 @@ builder.Configuration.AddEnvironmentVariables();
 #endregion
 
 builder.Services.AddControllers();
+builder.Services
+    .AddAuthentication(options =>
+    {
+        options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+        options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+    })
+    .AddJwtBearer(options =>
+    {
+        options.RequireHttpsMetadata = false;
+        options.SaveToken = true;
+    });
+builder.Services.AddAuthorization();
 #region config sec
 builder.Services.Configure<FileStorageSetting>(builder.Configuration.GetSection(AppsettingsEnum.FileStorageSetting.ToString()));
 #endregion config sec
@@ -92,6 +105,7 @@ app.UseSwagger();
 app.UseSwaggerUI();
 app.UseCors(policyName: "CorsPolicy");
 app.UseHttpsRedirection();
+app.UseAuthentication();
 app.UseAuthorization();
 app.UseStaticFiles();
 //#region Localization 
