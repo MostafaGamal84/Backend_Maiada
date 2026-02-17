@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using OfficeOpenXml;
 using Orbits.GeneralProject.BLL.BranchService;
 using Orbits.GeneralProject.Core.Entities;
+using Orbits.GeneralProject.DTO.BranchDto;
 
 namespace OrbitsProject.API.Controllers
 {
@@ -29,6 +30,25 @@ namespace OrbitsProject.API.Controllers
         public async Task<IActionResult> Get()
         {
             var result = await _branchBLL.Get();
+
+            return Ok(result);
+        }
+
+
+        [HttpPut]
+        [Route("Update")]
+        public async Task<IActionResult> Update([FromBody] BranchAddDto branchDto)
+        {
+            var result = await _branchBLL.Update(branchDto);
+
+            return Ok(result);
+        }
+
+        [HttpDelete]
+        [Route("SoftDelete/{id:int}")]
+        public async Task<IActionResult> SoftDelete([FromRoute] int id)
+        {
+            var result = await _branchBLL.SoftDelete(id);
 
             return Ok(result);
         }

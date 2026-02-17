@@ -12,5 +12,7 @@ namespace Orbits.GeneralProject.BLL.BranchService
     public interface IBranchBLL
     {
         Task<IResponse<List<BranchReDto>>> Get();
+        Task<IResponse<BranchReDto>> Update(BranchAddDto branchDto);
+        Task<IResponse<bool>> SoftDelete(int id);
     }
 }
