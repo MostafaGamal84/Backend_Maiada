@@ -35,6 +35,16 @@ namespace OrbitsProject.API.Controllers
         }
 
 
+
+        [HttpPost]
+        [Route("Add")]
+        public async Task<IActionResult> Add([FromBody] BranchAddDto branchDto)
+        {
+            var result = await _branchBLL.Add(branchDto);
+
+            return Ok(result);
+        }
+
         [HttpPut]
         [Route("Update")]
         public async Task<IActionResult> Update([FromBody] BranchAddDto branchDto)

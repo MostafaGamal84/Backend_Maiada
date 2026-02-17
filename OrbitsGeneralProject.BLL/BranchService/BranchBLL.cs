@@ -27,6 +27,28 @@ namespace Orbits.GeneralProject.BLL.BranchService
         }
 
 
+
+        public async Task<IResponse<BranchReDto>> Add(BranchAddDto branchDto)
+        {
+            var output = new Response<BranchReDto>();
+            try
+            {
+                var branch = _mapper.Map<Branch>(branchDto);
+                branch.CreatedAt = DateTime.UtcNow;
+                branch.IsDeleted = false;
+
+                await _branchRepository.AddAsync(branch);
+                await _unitOfWork.CommitAsync();
+
+                var mappedResult = _mapper.Map<BranchReDto>(branch);
+                return output.CreateResponse(mappedResult);
+            }
+            catch (Exception ex)
+            {
+                return output.CreateResponse(ex);
+            }
+        }
+
         public async Task<IResponse<BranchReDto>> Update(BranchAddDto branchDto)
         {
             var output = new Response<BranchReDto>();
